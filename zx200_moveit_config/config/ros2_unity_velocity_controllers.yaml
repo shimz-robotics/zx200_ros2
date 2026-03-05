@@ -1,0 +1,43 @@
+# Unity用 velocity controller設定
+# 元ファイル: ros2_velocity_controllers.yaml
+# PIDゲインをUnity環境向けに調整（P下げ、I=0、D追加で振動抑制）
+/**:
+  controller_manager:
+    ros__parameters:
+      update_rate: 100  # Hz
+
+      upper_arm_controller:
+        type: joint_trajectory_controller/JointTrajectoryController
+
+      joint_state_broadcaster:
+        type: joint_state_broadcaster/JointStateBroadcaster
+
+  upper_arm_controller:
+    ros__parameters:
+      joints:
+        - swing_joint
+        - boom_joint
+        - arm_joint
+        - bucket_joint
+        - bucket_end_joint
+      command_interfaces:
+        - velocity
+      state_interfaces:
+        - position
+        - velocity
+      state_publish_rate: 100.0  # Hz
+      gains:
+        swing_joint:  {p: 0.8, i: 0.0, d: 0.1}
+        boom_joint:   {p: 1.0, i: 0.0, d: 0.15}
+        arm_joint:    {p: 1.5, i: 0.0, d: 0.15}
+        bucket_joint: {p: 2.0, i: 0.3, d: 0.2}
+      constraints:
+        goal_time: 60.0
+        swing_joint:
+          goal: 0.03
+        boom_joint:
+          goal: 0.03
+        arm_joint:
+          goal: 0.03
+        bucket_joint:
+          goal: 0.03
